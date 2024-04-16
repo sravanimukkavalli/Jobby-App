@@ -37,7 +37,7 @@ const Header = props => {
       <ul className="unordered-icons-container">
         <Link to="/">
           <li className="each-icon">
-            <IoMdHome size={26} />
+            <IoMdHome size={28} />
           </li>
         </Link>
         <Link to="/jobs">
@@ -45,18 +45,15 @@ const Header = props => {
             <BsBriefcaseFill size={26} />
           </li>
         </Link>
+        <FiLogOut
+          className="each-icon"
+          size={26}
+          id="icon"
+          onClick={onClickLogout}
+        />
       </ul>
-      <FiLogOut size={26} id="icon" onClick={onClickLogout} />
     </div>
   )
 }
 export default withRouter(Header)
 
-// <button
-//         type="button"
-//         htmlFor="icon"
-//         onClick={onClickLogout}
-//         className="logout-icon"
-//       >
-//         <FiLogOut size={26} id="icon" />
-//       </button>

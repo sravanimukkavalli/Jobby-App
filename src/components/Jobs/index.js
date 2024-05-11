@@ -28,6 +28,14 @@ const employmentTypesList = [
   },
 ]
 
+const locationDetails = [
+  {label: 'Hyderabad', locationTypeId: 'HYDERABAD'},
+  {label: 'Bangalore', locationTypeId: 'BANGALORE'},
+  {label: 'Chennai', locationTypeId: 'CHENNAI'},
+  {label: 'Delhi', locationTypeId: 'DELHI'},
+  {label: 'Mumbai', locationTypeId: 'MUMBAI'},
+]
+
 const salaryRangesList = [
   {
     salaryRangeId: '1000000',
@@ -61,6 +69,7 @@ class Jobs extends Component {
     searchInput: '',
     apiStatus: apiStatusConstants.initial,
     jobsList: [],
+    locations: [],
   }
 
   componentDidMount() {
@@ -104,6 +113,18 @@ class Jobs extends Component {
 
   onChangeSearchInput = event => {
     this.setState({searchInput: event.target.value})
+  }
+
+  onChangeLocations = location => {
+    this.setState(prevState => ({
+      locations: [...prevState.locations, location],
+    }))
+  }
+
+  onRemoveLocations = location => {
+    const {locations} = this.state
+    const filteredLocations = locations.filter(each => each !== location)
+    this.setState({locations: filteredLocations})
   }
 
   onChangeEmployees = employeeId => {
@@ -161,14 +182,20 @@ class Jobs extends Component {
   )
 
   renderSuccessView = () => {
-    const {jobsList} = this.state
-    console.log(jobsList)
+    const {jobsList, locations} = this.state
+    console.log(locations)
+    let filteredJobList = jobsList
+    if (locations.length > 0) {
+      filteredJobList = jobsList.filter(each =>
+        locations.includes(each.location),
+      )
+    }
     return (
       <>
         {jobsList.length > 0 ? (
           <div className="success-container">
             <ul className="unordered-jobs-list-container">
-              {jobsList.map(each => (
+              {filteredJobList.map(each => (
                 <JobItem key={each.id} eachJobDetail={each} />
               ))}
             </ul>
@@ -234,6 +261,9 @@ class Jobs extends Component {
               onChangeEmployees={this.onChangeEmployees}
               onRemoveEmployees={this.onRemoveEmployees}
               onChangeSalary={this.onChangeSalary}
+              locationDetails={locationDetails}
+              onChangeLocations={this.onChangeLocations}
+              onRemoveLocations={this.onRemoveLocations}
             />
           </div>
           <div className="job-details-container">

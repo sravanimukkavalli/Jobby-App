@@ -1,7 +1,7 @@
 import './index.css'
 
 const Filters = props => {
-  const {salaryRangesList, employmentTypesList} = props
+  const {salaryRangesList, employmentTypesList, locationDetails} = props
 
   const renderEmployeeTypes = () => {
     const {onChangeEmployees, onRemoveEmployees} = props
@@ -19,7 +19,7 @@ const Filters = props => {
       }
       return (
         <li
-          className="ach-employee-item"
+          className="each-employee-item"
           onClick={onClickEmployee}
           key={eachEmployee.employmentTypeId}
         >
@@ -46,7 +46,7 @@ const Filters = props => {
       }
       return (
         <li
-          className="ach-employee-item"
+          className="each-employee-item"
           onClick={onClickSalaryId}
           key={each.salaryRangeId}
         >
@@ -66,9 +66,44 @@ const Filters = props => {
     })
   }
 
+  const renderLocationTypes = () => {
+    const {onChangeLocations, onRemoveLocations} = props
+
+    return locationDetails.map(eachLocation => {
+      const onClickEmployee = () => {
+        const element = document.getElementById(
+          `checkbox ${eachLocation.locationTypeId}`,
+        )
+        if (element.checked === true) {
+          onChangeLocations(eachLocation.label)
+        } else {
+          onRemoveLocations(eachLocation.label)
+        }
+      }
+      return (
+        <li
+          className="each-employee-item"
+          onChange={onClickEmployee}
+          key={eachLocation.locationTypeId}
+        >
+          <input
+            type="checkbox"
+            id={`checkbox ${eachLocation.locationTypeId}`}
+          />
+          <label
+            htmlFor={`checkbox ${eachLocation.locationTypeId}`}
+            className="employee-label"
+          >
+            {eachLocation.label}
+          </label>
+        </li>
+      )
+    })
+  }
+
   const employees = () => (
     <>
-      <h1 className="employee-heading">Type of Employement</h1>
+      <h1 className="employee-heading">Type of Employment</h1>
       <ul className="unordered-employees-list-container">
         {renderEmployeeTypes()}
       </ul>
@@ -84,11 +119,22 @@ const Filters = props => {
     </>
   )
 
+  const locations = () => (
+    <>
+      <h1 className="employee-heading">Locations</h1>
+      <ul className="unordered-employees-list-container">
+        {renderLocationTypes()}
+      </ul>
+    </>
+  )
+
   return (
     <div className="filters-container">
       {employees()}
       <hr className="hr-line" />
       {salaries()}
+      <hr className="hr-line" />
+      {locations()}
     </div>
   )
 }
